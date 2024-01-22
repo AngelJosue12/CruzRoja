@@ -1,0 +1,47 @@
+.Quote{
+    margin-top: -196px;
+    background: var(--color-bg-3);
+}
+.quote-title{
+    text-align: center;
+}
+.quote-cotnainer article{
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+    align-items: center;
+    text-align: center;
+}
+.quote-cotnainer article p{
+    font-size: 20px;
+    width: 60%;
+    margin: auto;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+@media (max-width:1024px){
+    .quote-cotnainer article p{
+        width: 80%;
+        font-size: 22px;
+    }
+    .quote-cotnainer h5{
+        font-size: 18px !important;
+    }
+    .Quote{
+        margin-top: -100px;
+    }
+}
+@media (max-width:600px){
+    .Quote{
+        margin-top: -70px;
+    }
+    .quote-cotnainer{
+        gap: 30px;
+    }
+    .quote-cotnainer article p{
+        width: 100%;
+        font-size: 22px;
+    }
+    
+}

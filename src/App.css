@@ -15,15 +15,16 @@
 }
 
 :root{
-    --color-primary: #7a6930;
-    --color-black: #111111;
-    --color-black-Ex: #222222;
+    --color-primary: #e62a11;
+    --color-black: #773030;
+    --color-black-Ex: #d31b1b;
     --color-dark: #7A7A7A;
-    --color-dark-Ex: #E5E3DA;
-    --color-light: #EFEEE8;
+    --color-dark-Ex: #ffffff;
+    --color-light: #ffffff;
 
-    --color-bg-1: #F3F2EC;
-    --color-bg-2: #EDEBE4;
+    --color-bg-1: #ffffff;
+    --color-bg-2: #ffffff;
+    --color-bg-3: #f6eeee;
 
 
     --font-family-prata: 'Prata', serif;

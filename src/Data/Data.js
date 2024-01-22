@@ -187,7 +187,7 @@ export const navLinks =[
   
   
   // Selling Data.......................
-  import sellingBookimage from '../assets/SellingBookImage/sellingBook.png'
+  import sellingBookimage from '../assets/SellingBookImage/principal.png'
   
   export const sellingBooksData =[
       {
