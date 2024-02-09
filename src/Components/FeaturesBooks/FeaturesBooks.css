@@ -20,8 +20,8 @@
 }
 .feature-border{
     margin-top: 56px;
-    height: 1px;
-    background: var(--color-dark-Ex);
+    height: 2.5px;
+    background: var(--color-bg-3);
 }
 .feature-btn{
     margin: auto;

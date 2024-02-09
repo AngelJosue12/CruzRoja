@@ -7,17 +7,25 @@ import BestSellingBook from '../Components/BestSellingBook/BestSellingBook'
 import PopularBooks from '../Components/PopularBooks/PopularBooks'
 import Quote from '../Components/Quote/Quote'
 import LstestArticle from '../Components/LstestArticle/LstestArticle'
-
+import Blog from '../Components/Blog/Blog'
+import Ayuda from '../Components/Ayuda/Ayuda'
+import Valores from '../Components/Valores/Valores'
 
 export default function Home() {
   return (
     <>
-    <Header/>
-    <Brands/>
-    <FeaturesBooks/>
+    <Ayuda/>
+  {/*  <Header/>
+  <Brands/>
+ 
+  <Quote/> */}
+ <Valores/>
+   {/*
     <BestSellingBook/>
-    <PopularBooks/>
-    <Quote/>
+  <PopularBooks/>
+ */}
+    
+    <Blog/>
     <LstestArticle/>
     </>
     

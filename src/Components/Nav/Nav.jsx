@@ -3,9 +3,14 @@ import './Nav.css'
 //import Router Link
 import { Link, NavLink } from 'react-router-dom'
 
+
+import Breadcrumbs from '../Breadcrumbs/Breadcrumbs'
+
+
 // import logo
 
 import Logo from '../../assets/logo.png'
+
 
 //import NavData
 import{navLinks, navRight} from '../../Data/Data'
@@ -41,34 +46,26 @@ export default function Nav() {
         </Link>
 
         {/*....................NavLinks............*/}
-        <ul className={`nav-links ${isNavLinksShowing ? 'navLinksShow' : 'navLinksHide'}`}>
+          <ul className={`nav-links ${isNavLinksShowing ? 'navLinksShow' : 'navLinksHide'}`}>
            {
-             navLinks.map(({name, path}, index)=>{
-               return(
+             navLinks.map((item, index)=>{
+              return (
                 <li key={index}>
-                    <NavLink to={path} className={({isActive})=>
-                      isActive ? 'active' : ''
-                    }>{name}</NavLink>
+                  <NavLink to={item.path} className={({ isActive }) =>
+                    isActive ? 'active' : ''
+                  }>
+                    <item.icon className='icon-navs'/>
+                    <span className='name-navs'>{item.name}</span>
+                   
+                  </NavLink>
                 </li>
-               )
+              );
+              
              })
            } 
             
         </ul>
-        {/*....................NavRight............*/}
-        <div className="nav-right">
-            {
-                navRight.managements.map((item, index)=>{
-                       return(
-                       <Link key={index} 
-                       //target='_blank'
-                       className='management-icons' to={item.link}>
-                        <item.icon/>
-                       </Link>
-                       )
-                })
-            }
-        </div>
+     
             
               <button className='menu-button' onClick={()=>
                 setIsNavLinksShowing(!isNavLinksShowing)

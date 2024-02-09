@@ -3,28 +3,44 @@
 // Nav [a] Links  Data.......................
 export const navLinks =[
     {
-        name:'Home',
+        name:'Inicio',
+        icon:TiHome,
         path:'/'
     },
     {
-        name:'About',
-        path:'/about'
+        name:'Conocenos',
+        icon:IoMdContacts,
+        path:'/Conocenos'
     },
     {
-        name:'Pages',
-        path:'/pages'
+        name:'Servicios',
+        icon:MdMedicalServices,
+        path:'/servicios'
     },
     {
-        name:'Shope',
-        path:'/shope'
+      name:'Login',
+      icon:FaUserCircle,
+        path:'Login'
     },
     {
-        name:'Articles',
-        path:'/articles'
+      name:'Registro',
+      icon:FaRegAddressBook,
+        path:'Registro'
     },
     {
-        name:'Contact',
-        path:'/contact'
+        name:'Citas',
+        icon:IoCalendarNumberSharp,
+        path:'/citas'
+    },
+    {
+        name:'Donaciones',
+        icon:FaDonate,
+        path:'/donaciones'
+    },
+    {
+        name:'Contacto',
+        icon:FaPhoneFlip,
+        path:'/contacto'
     },
   ];
   
@@ -35,6 +51,20 @@ export const navLinks =[
   import { FiUser } from 'react-icons/fi';
   import { VscSearch } from 'react-icons/vsc';
   import { BsBag } from 'react-icons/bs';
+  import { FaRegUser } from "react-icons/fa";
+  import { FaClipboardUser } from "react-icons/fa6";
+  import { IoSearch } from "react-icons/io5";
+  import { FaRegCircleUser } from "react-icons/fa6";
+  import { TiHome } from "react-icons/ti";
+  import { IoMdContacts } from "react-icons/io";
+  import { MdMedicalServices } from "react-icons/md";
+  import { FaUserCircle } from "react-icons/fa";
+  import { PiUserCirclePlusFill } from "react-icons/pi";
+  import { IoCalendarNumberSharp } from "react-icons/io5";
+  import { FaRegAddressBook } from "react-icons/fa";
+  import { FaDonate } from "react-icons/fa";
+  import { FaPhoneFlip } from "react-icons/fa6";
+
   
   
   // navRight links Data..............................
@@ -43,17 +73,21 @@ export const navLinks =[
       {
           id: 1,
           icon: FiUser,  
-          link: '*'
+          link: 'Login',
+          name: 'LOGIN'
       },
       {
           id: 2,
           icon: BsBag,      
-          link: '*'
+          link: 'Registro',
+          name: 'Registro'
+
       },
       {
           id: 3,
-          icon: VscSearch,      
-          link: '*'
+          icon: IoSearch,      
+          link: '*',
+          name: ''
       },
     ]
       
@@ -91,7 +125,15 @@ export const navLinks =[
       },
   ];
   
-  
+  export const headerBooks2 =[
+    {
+        id: 1,
+        img: HBook1,
+        title:'Necesitas Ayuda',
+        info: '"¡Un Clic para la Ayuda Vital! Con nuestro botón de emergencia,<br> la Cruz Roja está a tu lado en segundos. Tu seguridad es nuestra<br> prioridad, presiona ahora y deja que la asistencia llegue volando."',
+        btnLink: '*'
+    },
+];
   
   // Brands Data.......................
   import Brand1 from '../assets/Brands/brand1.png'
@@ -184,6 +226,53 @@ export const navLinks =[
       },
   ];
   
+
+  import va1 from '../assets/img/p5.png'
+  import va2 from '../assets/img/p6.png'
+  import va3 from '../assets/img/p7.png'
+  import va4 from '../assets/img/p8.png'
+  import va5 from '../assets/img/p10.png'
+  
+   
+   
+   export const featuredBooksData2 =[
+       {
+           id: 1,
+           img: va1, 
+           imgLlink: "*", 
+           nameLink:"*",
+           name: 'Independencia',        
+       },
+       {
+           id: 2,
+           img: va2,  
+           imgLlink: "*", 
+           nameLink:"*",
+           name: 'Neutralidad',
+   
+       },
+       {
+           id: 3,
+           img: va3, 
+           imgLlink: "*", 
+           nameLink:"*", 
+           name: 'Imparcialidad',
+       },
+       {
+           id: 4,
+           img: va4, 
+           imgLlink: "*", 
+           nameLink:"*", 
+           name: 'Humanidad',
+       },
+       {
+           id: 5,
+           img: va5, 
+           imgLlink: "*", 
+           nameLink: "*", 
+           name: 'Voluntariado',
+       },
+   ];
   
   
   // Selling Data.......................
@@ -304,20 +393,20 @@ export const navLinks =[
 
   
    // lettestArticleData Data .......................
-   import ArticleImage1 from '../assets/letestArticlesIamge/ArticleImage1.png'
-   import ArticleImage2 from '../assets/letestArticlesIamge/ArticleImage2.png'
-   import ArticleImage3 from '../assets/letestArticlesIamge/ArticleImage3.png'
+   import ArticleImage1 from '../assets/letestArticlesIamge/ArticleImage1.jpeg'
+   import ArticleImage2 from '../assets/letestArticlesIamge/ArticleImage2.jpeg'
+   import ArticleImage3 from '../assets/letestArticlesIamge/ArticleImage3.jpeg'
   
   
    
    export const lettestArticleData = [
     {
       id: 1,
-      title: 'Reading books always makes the moments happy',
+      title: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Sed euismod metus in tortor fringilla, et commodo metus bibendum.',
       image: ArticleImage1,
       titLink: "#",
       date: '2 aug, 2021',
-      inspiration: 'Inspiration', 
+      inspiration: 'Ultimas Noticias', 
       fbLink: "*",
       instLink: "*",
       twitaLink: "*",
@@ -325,10 +414,10 @@ export const navLinks =[
     {
       id: 2,
       image: ArticleImage2,
-      title: 'Reading books always makes the moments happy',
+      title: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Sed euismod metus in tortor fringilla, et commodo metus bibendum.',
       titleLink: "*",
       date: '2 aug, 2021',
-      inspiration: 'Inspiration', 
+      inspiration: 'Ultimas Noticias', 
       fbLink: "*",
       instLink: "*",
       twitaLink: "*",
@@ -336,10 +425,10 @@ export const navLinks =[
     {
       id: 3,
       image: ArticleImage3,
-      title: 'Reading books always makes the moments happy',
+      title: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Sed euismod metus in tortor fringilla, et commodo metus bibendum.',
       titleLink: "*",
       date: '2 aug, 2021',
-      inspiration: 'Inspiration', 
+      inspiration: 'Ultimas Noticias', 
       fbLink: "*",
       instLink: "*",
       twitaLink: "*",
@@ -356,47 +445,143 @@ export const navLinks =[
   import {  RiTwitterXLine } from 'react-icons/ri';
   import {  GrLinkedinOption } from 'react-icons/gr';
 
+  import Instagram from '../assets/img/RedesSociales/instagram.png'
+  import Tiwitter from '../assets/img/RedesSociales/twitter.png'
+  import YouTube from '../assets/img/RedesSociales/youtube.png'
+  import Facebook from '../assets/img/RedesSociales/facebook.png'
+
   // Footers Data .......................  
   export const FootersLinksData = {
   
-    Aboutus: [
+    Nosotros: [
       { linkname: 'vision ', link: "*", },    
-      { linkname: 'articles ', link: "*", },    
-      { linkname: 'careers ', link: "*", },    
-      { linkname: 'service terms ', link: "*", },    
-      { linkname: 'donate ', link: "*", },   
+      { linkname: 'mision ', link: "*", },       
+      { linkname: 'Nuestro equipo', link: "*", },    
+      { linkname: 'Voluntariado ', link: "*", },   
      
     ],    
-    Discover: [
-      { linkname: 'Home ', link: "*", },    
-      { linkname: 'articles ', link: "*", },    
-      { linkname: 'Books ', link: "*", },    
-      { linkname: 'Authors  ', link: "*", },    
-      { linkname: 'Subjects ', link: "*", },   
-      { linkname: 'Advanced Search ', link: "*", },   
+    Contenido: [
+      { linkname: 'Inicio ', link: "*", },    
+      { linkname: 'Login ', link: "*", },    
+      { linkname: 'Registro ', link: "*", },    
+      { linkname: 'Donaciones  ', link: "*", },    
+      { linkname: 'Servicios ', link: "*", },   
     ],    
-    Myaccount: [
-      { linkname: 'Sign In', link: "*", },    
-      { linkname: 'articles ', link: "*", },    
-      { linkname: 'View Cart', link: "*", },    
-      { linkname: 'My Wishtlist  ', link: "*", },    
-      { linkname: 'Track My Order ', link: "*", },      
-    ],  
+  
   
     Help: [
-      { linkname: 'Help center ', link: "*", },    
-      { linkname: 'Report a problem  ', link: "*", },    
-      { linkname: 'View Cart', link: "*", },    
-      { linkname: 'Suggesting edits ', link: '#' },    
-      { linkname: 'Contact us', link: "*", },   
+      { linkname: 'Centro de ayuda', link: "*", },    
+      { linkname: 'Soporte', link: "*", },     
+      { linkname: 'Contactanos', link: "*", },   
     ],  
   
     socials: [
-      { icon: ImFacebook, link: 'https://www.facebook.com' },
-      { icon: FiInstagram, link: 'https://www.twitter.com' },
-      { icon: GrLinkedinOption, link: 'https://www.instagram.com' },
-      { icon: RiTwitterXLine, link: 'https://www.twitter.com' },
-      { icon: ImBehance, link: 'https://www.twitter.com' }
+      { icon: Facebook, link: 'https://www.facebook.com' },
+      { icon: Tiwitter, link: 'https://www.twitter.com' },
+      { icon: Instagram, link: 'https://www.instagram.com' },
+      { icon: YouTube, link: 'https://www.youtube.com' }
     ],    
       
   };
+
+  export const serviciosCruzRoja = [
+    {
+      id: 1,
+      servicio: "Equipo de Rescate Urbano",
+      organizacion: "Cruz Roja Internacional",
+      ubicacion: "Ciudad Metrópolis",
+      descripcion: "Equipo especializado en rescate en entornos urbanos y estructuras colapsadas."
+    },
+    {
+      id: 2,
+      servicio: "Clínica Móvil de Atención Pediátrica",
+      organizacion: "Cruz Roja Nacional",
+      ubicacion: "Pueblo Soleado",
+      descripcion: "Unidad móvil dedicada a brindar atención médica a niños y adolescentes en comunidades rurales."
+    },
+    {
+      id: 3,
+      servicio: "Unidad de Apoyo Psicosocial",
+      organizacion: "Cruz Roja Local",
+      ubicacion: "Villa Esperanza",
+      descripcion: "Servicio que ofrece apoyo emocional y psicológico a personas afectadas por desastres o crisis."
+    },
+
+    {
+      id: 4,
+      servicio: "Centro de Donación de Sangre",
+      organizacion: "Cruz Roja Regional",
+      ubicacion: "Ciudad Saludable",
+      descripcion: "Instalación dedicada a la recolección de sangre para emergencias médicas y transfusiones."
+    },
+    {
+      id: 5,
+      servicio: "Equipo de Logística para Emergencias",
+      organizacion: "Cruz Roja Internacional",
+      ubicacion: "Ciudad Logística",
+      descripcion: "Equipo especializado en la gestión eficiente de recursos y suministros durante situaciones de emergencia."
+    },
+    {
+      id: 6,
+      servicio: "Centro de Rehabilitación Física",
+      organizacion: "Cruz Roja Nacional",
+      ubicacion: "Pueblo Renacer",
+      descripcion: "Facilidad dedicada a la rehabilitación y fisioterapia para personas con discapacidades físicas temporales o permanentes."
+    },
+    {
+      id: 7,
+      servicio: "Brigada Canina de Búsqueda y Rescate",
+      organizacion: "Cruz Roja Local",
+      ubicacion: "Villa Canina",
+      descripcion: "Unidad canina entrenada para la búsqueda y rescate de personas en áreas afectadas por desastres naturales."
+    },
+    {
+      id: 8,
+      servicio: "Servicio de Educación en Salud",
+      organizacion: "Cruz Roja Regional",
+      ubicacion: "Ciudad Educación",
+      descripcion: "Programa educativo que proporciona información sobre salud, prevención de enfermedades y primeros auxilios a comunidades locales."
+    },
+    {
+      id: 9,
+      servicio: "Equipo de Intervención en Crisis",
+      organizacion: "Cruz Roja Internacional",
+      ubicacion: "Ciudad Esperanza",
+      descripcion: "Grupo especializado en proporcionar apoyo inmediato y recursos durante crisis humanitarias para mitigar el impacto emocional en las personas afectadas."
+    },
+    {
+      id: 10,
+      servicio: "Unidad de Telemedicina",
+      organizacion: "Cruz Roja Nacional",
+      ubicacion: "Pueblo Conectado",
+      descripcion: "Servicio que ofrece consultas médicas a distancia, brindando atención a comunidades remotas a través de tecnología de telemedicina."
+    },
+    {
+      id: 11,
+      servicio: "Equipo de Suministros de Emergencia",
+      organizacion: "Cruz Roja Local",
+      ubicacion: "Villa Abastecimiento",
+      descripcion: "Equipo encargado de la distribución eficiente de suministros esenciales durante desastres y emergencias, garantizando una respuesta rápida y efectiva."
+    },
+    {
+      id: 12,
+      servicio: "Centro de Recuperación Nutricional",
+      organizacion: "Cruz Roja Regional",
+      ubicacion: "Ciudad Nutrición",
+      descripcion: "Facilidad dedicada a la atención y recuperación de niños con desnutrición, proporcionando alimentos nutritivos y cuidado médico especializado."
+    },
+    {
+      id: 13,
+      servicio: "Equipo de Gestión de Información",
+      organizacion: "Cruz Roja Internacional",
+      ubicacion: "Ciudad Información",
+      descripcion: "Grupo especializado en recopilar, analizar y gestionar información relevante durante crisis humanitarias para facilitar una toma de decisiones informada."
+    },
+    {
+      id: 14,
+      servicio: "Centro de Capacitación en Primeros Auxilios",
+      organizacion: "Cruz Roja Nacional",
+      ubicacion: "Pueblo Seguro",
+      descripcion: "Instalación que ofrece cursos y capacitación en primeros auxilios a la comunidad, promoviendo la preparación y la respuesta rápida ante emergencias."
+    }
+];

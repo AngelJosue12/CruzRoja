@@ -16,7 +16,7 @@ export default function Quote() {
                         quoteData.map(({quote, speaker}, index)=>{
                             return(
                                 <article key={index}>
-                                    <p>{quote}</p>
+                                    <p className='color-text'>{quote}</p>
                                     <h5>{speaker}</h5>
                                 </article>
                             )

@@ -2,6 +2,7 @@ import React from 'react'
 import './LstestArticle.css'
 
 import TitleTypeOne from '../../Ui/TitleTypeOne/TitleTypeOne'
+import { BsArrowReturnRight } from "react-icons/bs";
 
 import { lettestArticleData } from '../../Data/Data'
 
@@ -15,8 +16,8 @@ import { Link } from 'react-router-dom'
 export default function LstestArticle() {
   return (
     <section className='latestArticle'>
-        <div className="continer latet-container">
-            <TitleTypeOne Title={'Latest Articles'} TitleTop={'Read our articles'}/>
+        <div className="continer latest-article-container">
+            <TitleTypeOne Title={'Enterate de Todo'} TitleTop={'Nuestras Noticias'}/>
             <div className="latest-article-content">
                 {
                 lettestArticleData.map(({titLink, title, date, instLink,
@@ -33,9 +34,12 @@ export default function LstestArticle() {
                                     </Link>
                             </div>
                             <div className="latest-article-social">
+                                <p>{inspiration}</p>
+                                <div className="article-social">
                                 <a href={fbLink}><ImFacebook/></a>
                                 <a href={instLink}><FiInstagram/></a>
                                 <a href={twitaLink}><RiTwitterXLine/></a>
+                                </div>
                             </div>
                         </article>
 
@@ -43,9 +47,12 @@ export default function LstestArticle() {
                 }
                 )}
             </div>
+            <center>
             <Link to={'*'} className='btn btn-border'>
-                read all articles
-            <span><GrLinkedinOption/></span></Link>
+                Leer mas
+            <BsArrowReturnRight/></Link>
+            </center>
+            
         </div>
        
     </section>

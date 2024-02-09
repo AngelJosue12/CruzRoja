@@ -2,7 +2,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Prata&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,600;0,800;1,200&family=Prata&display=swap');
 
+  @import url('https://fonts.googleapis.com/css2?family=Oswald&family=Plus+Jakarta+Sans:ital,wght@0,600;0,800;1,200&family=Prata&display=swap');
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@tailwindcss/forms;
 /*...................Custom styles.............. */
 *{
     margin: 0;
@@ -19,15 +24,18 @@
     --color-black: #773030;
     --color-black-Ex: #d31b1b;
     --color-dark: #7A7A7A;
+    --color-dark-Ex2: #b1a1a1;
     --color-dark-Ex: #ffffff;
     --color-light: #ffffff;
+    --color-negro:  #575555;
 
     --color-bg-1: #ffffff;
     --color-bg-2: #ffffff;
     --color-bg-3: #f6eeee;
+    --color-bg-4: #ad2e2e;
 
 
-    --font-family-prata: 'Prata', serif;
+    --font-family-prata: 'Oswald', sans-serif;
     --font-family-Jakarta: 'Plus Jakarta Sans', sans-serif;
 
     --transition: .4s ease;
@@ -83,7 +91,8 @@ h5 span{
     color: var(--color-primary)
 }
 p{
-    font-size: 16px;
+    color: var(--color-negro) !important;
+    font-size: 14px;
     line-height: 220%;
     letter-spacing: 4%;    
 }
@@ -104,6 +113,7 @@ small{
     text-transform: uppercase;
     transition: var(--transition);
     position: relative;
+    border-radius: 5%;
 }
 .btn::after{
     content: '';
@@ -115,15 +125,19 @@ small{
     top: 0;
     z-index: -1;
     transition: var(--transition);
+    border-radius: 5%;
 }
 .btn:hover::after{
     width: 100%;
+    border-radius: 5%;
 }
 .btn:hover{
     color: var(--color-bg-1);
+    border-radius: 5%;
 }
 .btn-border{
     border: 1px solid var(--color-black);
+    border-radius: 5%;
 }
 button{
     background: transparent;

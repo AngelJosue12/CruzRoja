@@ -1,6 +1,6 @@
 .Brands{
     background: var(--color-bg-3);
-    padding: 20px 0;
+    padding: 60px 0 !important;
 }
 .brands-container{
     display: grid;
