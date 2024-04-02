@@ -22,7 +22,7 @@
   }
 
 .container3.error-present {
-    min-height: 1080px;
+    min-height: 1060px;
   }
   
 .container3 p{
@@ -172,6 +172,17 @@
 .icon{
     font-size: 17px !important;
 }
+.error-message{
+    margin-top: 3.5px !important;  
+    color: red !important;
+  
+  }
+  .errores{
+      margin-bottom: 20px;
+  }
+  
+  
+  
 
 
 

@@ -191,7 +191,7 @@
 }
 .error-message{
   margin-top: -2px !important;  
-
+  color: red !important;
 }
 .errores{
     margin-bottom: 20px;

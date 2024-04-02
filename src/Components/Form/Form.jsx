@@ -12,6 +12,10 @@ import { jwtDecode } from 'jwt-decode';
 import LoginImg from '../../assets/img/p3.png';
 import LoginImg2 from '../../assets/img/logo.png';
 import './Form.css';
+import { Button, Space, notification } from 'antd';
+import { CheckCircleOutlined, CloseCircleOutlined, InfoCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+
+
 
 export default function Form() {
 
@@ -45,13 +49,42 @@ export default function Form() {
   const maxAttempts = 4;
   const encodedEmail = btoa(email);
 
+  const openNotificationWithIcon = (type) => {
+    const icon = type === 'success' ? <CheckCircleOutlined style={{ color: '#52c41a' }} /> :
+                 type === 'info' ? <InfoCircleOutlined style={{ color: '#1890ff' }} /> :
+                 type === 'warning' ? <ExclamationCircleOutlined style={{ color: '#faad14' }} /> :
+                 <CloseCircleOutlined style={{ color: '#ff4d4f' }} />;
+  
+    const backgroundColor = type === 'success' ? '#f6ffed' :
+                            type === 'info' ? '#f0f5ff' :
+                            type === 'warning' ? '#fff7e6' :
+                            '#fff1f0';
+  
+    notification.open({
+      message: 'Notification Title',
+      description: 'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+      icon: icon,
+      style: {
+        backgroundColor: backgroundColor,
+        border: `1px solid ${type === 'success' ? '#b7eb8f' :
+                                 type === 'info' ? '#91d5ff' :
+                                 type === 'warning' ? '#ffe58f' :
+                                 '#ffccc7'}`
+      },
+      duration: 3 // Cambia la duración según tus preferencias
+    });
+  };
+
+  
+
+
   const handleSubmit = (event) => {
     event.preventDefault();
   
     const captchaValue = captcha.current.getValue();
   
     if (!captchaValue) {
-      message.error('Por favor, realiza el captcha');
+     openNotificationWithIcon('warning');
       return;
     }
   

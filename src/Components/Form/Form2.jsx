@@ -456,11 +456,7 @@ export default function Form2() {
             onBlur={() => validateNombre(nombre)}
             required
            type="text" autoComplete="nombre" className=" {nombreError ? 'input-error' : ''} block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
-           {nombreError && (
-            <div className="error-container">
-              <p className="error-message">{nombreError}</p>
-            </div>
-          )}
+           {nombreError && <p className="error-message">{nombreError}</p> }
 
            
     </div>

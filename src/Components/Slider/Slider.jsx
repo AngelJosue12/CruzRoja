@@ -25,7 +25,7 @@ const SwiperDemo = () => {
      <section className='Featured'  style={{marginTop:"90px", marginBottom:"-100px"}}>
      <div className="container featurers-book-cotnainer">
          {/*....................Title Props............... */}
-         <TitleTypeOne TitleTop={'CADA GRANITO DE AYUDA CUENTA FALTAS TU!!'} Title={'Colectas'}/>
+         <TitleTypeOne TitleTop={'CADA GRANITO DE AYUDA CUENTA, FALTAS TU!!'} Title={'Colectas'}/>
          {/*....................Swiper............... */}
          
         <br />
