@@ -10,7 +10,7 @@
     overflow: hidden;
     width: 900px;
     max-width: 70%;
-    min-height: 1000px;
+    min-height: 1070px;
     margin-bottom: 60px;
     margin-top: 15px;
 }
@@ -22,7 +22,7 @@
   }
 
 .container3.error-present {
-    min-height: 1060px;
+    min-height: 1130px;
   }
   
 .container3 p{
@@ -78,12 +78,13 @@
     padding: 0 0;
     height: 100%;
     margin-top: -6px;
+    margin: 0 40px ;
 }
 
 .container3 input{
     background-color: #eee;
     border: none;
-    margin: 2px 0 ;
+    margin: 2px -5px ;
     padding: 4px 12px;
     font-size: 12px;
     border-radius: 8px;
@@ -173,7 +174,7 @@
     font-size: 17px !important;
 }
 .error-message{
-    margin-top: 3.5px !important;  
+    margin-top: 3.6px !important;  
     color: red !important;
   
   }
@@ -181,10 +182,44 @@
       margin-bottom: 20px;
   }
   
+ .tamano{
+    width: 72.2% !important; 
+    margin-left: 60px !important;
+ } 
   
-  
+.inputNumeroRegion{
 
+    margin: 6.7px -15px;
+    padding: 7px 5px;
+    border-radius: 8px 0 0 8px; /* redondea la esquina superior izquierda */
+    border-bottom:  none; /* Aplica el borde solo en la línea inferior */
+    border-top: none; /* Elimina el borde en la línea superior */
+    border-right: 1px solid #ccc !important; /* Elimina el borde en la línea derecha */
+    border-left: none; /* Elimina el borde en la línea izquierda */
+    width: 75px; /* Ancho predeterminado */
+}
 
+.inputTel{
+    border-radius: 8px !important;
+    background-color: #eee !important;
+    border: none !important;
+    margin: 8px -5px !important;
+    padding: 2px 7px 1px 85px !important; /* Ajusta el padding-bottom para separar la línea de escritura */
+    font-size: 12px !important;
+    width: 110% !important;
+    outline: none !important;
+    line-height: 2.5; /* Opcional: ajusta el espacio vertical entre líneas */
+}
 
- 
-
+.error-container{
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+}
+.error-messages2{
+    position: relative !important;
+    padding: -7px 3px !important;
+    margin-top: 6px !important;
+    color: red !important;
+}

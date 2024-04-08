@@ -18,6 +18,8 @@ import {
 import { useState, useRef, useEffect } from 'react'
 import { Switch } from '@headlessui/react'
 import { message } from 'antd'
+
+
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
@@ -29,12 +31,15 @@ import { IoEyeSharp } from "react-icons/io5";
 import { FaEyeSlash } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import {  Spin, Alert, Flex  } from 'antd';
 
 export default function Form2() {
 
 
+
+
   const { countries } = useCountries();
-  const [country, setCountry] = React.useState(0);
+  const [country, setCountry] = useState(0);
   const { name, flags, countryCallingCode } = countries[country];
 
 
@@ -76,7 +81,7 @@ export default function Form2() {
   const [nombreError, setNombreError] = useState('');
   const [apellidoMError, setApellidoMError] = useState('');
   const [apellidoPError, setApellidoPError] = useState('');
-
+  const [selectedCountryCallingCode, setSelectedCountryCallingCode] = useState('');
 
   ///errores adaptacion
   const [errorPresent, setErrorPresent] = useState(false);
@@ -97,7 +102,7 @@ export default function Form2() {
 
 
   ////////// VALIDACION DE QUE SI EXISTE EL CORREO Y TELEFONO 
-  const validateData = async (email, telefono) => {
+  const validateData = async (email, telefono, selectedCountryCallingCode) => {
     const emailOptions = { method: 'GET' };
     const telefonoOptions = { method: 'GET' };
   
@@ -106,7 +111,8 @@ export default function Form2() {
       const emailResponse = await fetch(`https://emailvalidation.abstractapi.com/v1/?api_key=ad80009a6a4d42bb85961c91473598db&email=${email}`, emailOptions);
       const emailData = await emailResponse.json();
   
-      const telefonoConCodigoPais = `52${telefono}`;
+      const telefonoConCodigoPais = `${selectedCountryCallingCode}${telefono}`;
+      console.log(telefonoConCodigoPais);
       // Validar el número de teléfono
       const telefonoResponse = await fetch(`https://phonevalidation.abstractapi.com/v1/?api_key=26001135086c4e8e8dc7479bbaa28d01&phone=${telefonoConCodigoPais}`, telefonoOptions);
       const telefonoData = await telefonoResponse.json();
@@ -118,13 +124,16 @@ export default function Form2() {
         } else if(emailData.deliverability == "UNDELIVERABLE" && telefonoData.valid == true) {
           message.warning('El correo electrónico proporcionado no es válido, introduzca uno real existente');
         } else if (telefonoData.valid == false && emailData.deliverability == "DELIVERABLE") {
-          message.warning('El número de teléfono proporcionado no es válido, introduzca uno real existente');
+          message.warning('El número de teléfono proporcionado no es válido, introduzca uno real y verifique el Prefijo del Numero');
         }
         return false;
       }
   
       // Si ambos son válidos, retornar verdadero
-      message.success('Datos validados correctamente');
+      const isSuccess = await success(); // Espera a que se resuelva la promesa de success
+        return isSuccess;
+
+
       return true;
     } catch (error) {
       console.error('Error al validar los datos:', error);
@@ -132,8 +141,25 @@ export default function Form2() {
     }
   };
   
+  const success = async () => {
+  message.loading({ content: 'Verificando datos..', duration: 2 });
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      message.success({ content: 'Datos correctos', duration: 2 });
+      resolve(true); // Resuelve la promesa con true después de que se complete la animación
+    }, 1700); // Ajusta este valor según sea necesario
+  });
+};
   
-  
+
+
+const [spinning, setSpinning] = React.useState(false);
+const showLoader = () => {
+  setSpinning(true);
+  setTimeout(() => {
+    setSpinning(false);
+  }, 5000);
+};
 
 
 
@@ -173,12 +199,20 @@ export default function Form2() {
     formData.append("Correo", email);
   
     // Validar campos antes de enviar el formulario
-    if (validateEmail(email)==true && validatePassword(password)==true && validatePassword2(password2) && validateApellidoM(ApellidoM)==true && validateApellidoP(ApellidoP)==true && validateNombre(nombre)==true && validateTelefono(telefono)==true &&  !agreed || !agreed2 ) {
+    if (validateEmail(email)==true && validatePassword(password)==true && validatePassword2(password2) && validateNombre(ApellidoM)==true && validateApellidoP(ApellidoP)==true && validateNombre(nombre)==true && validateTelefono(telefono)==true &&  !agreed || !agreed2 ) {
       const telefonoValido = validateTelefono(telefono);
+      const contraValida = validatePassword(password);
+      const contraValida2 = validatePassword2(password2);
+      const  nombresValidos = validateNombre(nombre);
+      const  ApeMValidate=validateApellidoM(ApellidoM);
+      const ApePVali= validateApellidoM(ApellidoP);
+      const CorreoValida =validateEmail(email);
+
   
       // Verificar si hay algún error en el campo de teléfono
-      if (!telefonoValido) {
+      if (!telefonoValido || !contraValida || !contraValida2 || !nombresValidos || !ApeMValidate || !ApePVali || !CorreoValida) {
         // Si el teléfono no es válido, detener el envío del formulario
+        message.warning('Rellene Correctamente los Campos');
         return;
       }
   
@@ -195,9 +229,9 @@ export default function Form2() {
         if (result.mensaje === 'Este correo ya está registrado') {
           message.warning('Este correo ya está registrado');
         } else {
-          message.loading('Validando datos');
+          
   
-          validateData(email, telefono)
+          validateData(email, telefono, selectedCountryCallingCode)
           .then((valid) => {
             if (valid) {
               fetch(
@@ -220,6 +254,7 @@ export default function Form2() {
               )
               .then((res) => res.json())
               .then((result) => {
+                showLoader();
                 setTimeout(() => {
                   message.success('Usuario registrado exitosamente', 2);
                   navigate('/Login');
@@ -356,31 +391,48 @@ export default function Form2() {
       }
       return passed;
     }
-    
-    
-  
-    const validatePassword = (password) => {
-      if(password==''){
-        setPasswordError('no puede estar vacio')
-        return false;
-      }else{
-        if(password.length<8){
-          setPasswordError('minimo de 8 caracteres');
-          return false;
-        }else{ 
-          const passwordValidate= checkPasswordStrength(password,8,5);
-          if(passwordValidate){
-            setPasswordError('')
-            return true;
-          }else{
-            setPasswordError('Debe tener almenos una mayuscula, minuscula, numero y caracter especial')
-            return false;
 
-          }
-        }
-      }
+    ////// PASWORD VALIDATE
+    
+    
+    const [errors, setErrors] = useState([]);
+
+    const handlePasswordChange = (event) => {
+        const newPassword = event.target.value;
+        setPassword(newPassword);
+        validatePassword(newPassword);
     };
 
+
+    const validatePassword = (password) => {
+      const newErrors = [];
+  
+      if (password.length < 8) {
+          newErrors.push('* Mínimo 8 caracteres');
+      }
+      if (!/[a-z]/.test(password)) {
+          newErrors.push('* Al menos una letra minúscula');
+      }
+      if (!/[A-Z]/.test(password)) {
+          newErrors.push('* Al menos una letra mayúscula');
+      }
+      if (!/\d/.test(password)) {
+          newErrors.push('* Al menos un número');
+      }
+      if (!/[^a-zA-Z\d]/.test(password)) {
+          newErrors.push('* Al menos un caracter especial');
+      }
+  
+      setErrors(newErrors);
+  
+      // Si no hay errores, retorna true; de lo contrario, retorna false
+      return newErrors.length === 0;
+  };
+  
+
+
+
+  
 
     const validatePassword2=(password2)=>{
       if(password2==password){
@@ -420,7 +472,7 @@ export default function Form2() {
 
     return (
         <div className={containerClass} id="container">
-          
+          <Spin spinning={spinning} fullscreen />
     
           <div className="form-container sign-in">
             <form onSubmit={handleSubmit}>
@@ -489,7 +541,7 @@ export default function Form2() {
     </div>
   </div>
 
-
+{/* 
   <div className="sm:col-span-3 md:col-span-3 relative">
   <label htmlFor="telefono" className="block text-sm font-medium leading-6 text-gray-900">Telefono</label>
   <div className="mt-2">
@@ -508,7 +560,77 @@ export default function Form2() {
     <p className="error-message absolute -mt-6 sm:-mt-6 text-xs text-red-500 left-0">{telefonoError}</p>
   )}
 </div>
+*/}
 
+<div className="sm:col-span-3 md:col-span-3 relative">
+  <label htmlFor="telefono" className="block text-sm font-medium leading-6 text-gray-900">Telefono</label>
+  <div className=' bg-blue-gray-100 rounded-md relative'>
+    <input  
+      type="tel"
+      id="telefono"
+      name="telefono"
+      value={telefono}
+      required
+      onChange={(e) => setTelefono(e.target.value)}
+      onBlur={() => validateTelefono(telefono)} // Aquí se llama a validateTelefono correctamente
+      className={`inputTel block w-full rounded-md border-0 py-1.5 pl-12 pr-5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 ${telefonoError ? 'input-error' : ''}`}
+    />
+    <div className="absolute inset-y-0 left-0 flex items-center pl-3">
+      <Menu placement="bottom-start">
+        <MenuHandler>
+          <Button
+            ripple={false}
+            variant="text"
+            color="blue-gray"
+            className="flex items-center gap-1 inputNumeroRegion"
+          >
+            <img
+              src={flags.svg}
+              alt={name}
+              className="h-4 w-4 rounded-full object-cover"
+            />
+            {countryCallingCode}
+          </Button>
+        </MenuHandler>
+        <MenuList className="max-h-[20rem] max-w-[17rem] z-50 relative overflow-y-auto ">
+          {countries.map(({ name, flags, countryCallingCode }, index) => {
+            return (
+              <MenuItem
+                key={name}
+                value={name}
+                className="flex items-center gap-2"
+                onClick={() => {
+                  setCountry(index);
+                  setSelectedCountryCallingCode(countryCallingCode); // Aquí actualizas el estado con el código de país
+                  console.log(setSelectedCountryCallingCode)
+                }}
+              >
+                <img
+                  src={flags.svg}
+                  alt={name}
+                  className="h-4 w-4 rounded-full object-cover"
+                />
+                {name} <span className="ml-auto">{countryCallingCode}</span>
+                
+              </MenuItem>
+            );
+          })}
+        </MenuList>
+      </Menu>
+    </div>
+  </div>
+  {telefonoError && (
+    <p className="error-message absolute mt-6 sm:-mt-6 text-xs text-red-500 left-0">{telefonoError}</p>
+  )}
+</div>
+
+
+
+
+
+
+
+      
 
   <div className="sm:col-span-5">
     <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">Correo</label>
@@ -537,7 +659,7 @@ export default function Form2() {
       id="password"
       name="password"
       value={password}
-      onChange={(e) => setPassword(e.target.value)}
+      onChange={handlePasswordChange}
       onBlur={() => validatePassword(password)}
       autoComplete="password" 
       className={`block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 ${passwordError ? 'input-error' : ''} ${passwordError ? 'input-error-padding' : ''}`}
@@ -553,10 +675,19 @@ export default function Form2() {
         <IoEyeSharp className="h-5 w-5" aria-hidden="true" />
       )}
     </button>
-  </div> <NivelSeguridad password={password}/> <br />
-  {passwordError && (
-    <p className="error-message absolute -mt-6 text-xs text-red-500 left-0">{passwordError}</p>
+  </div> <NivelSeguridad password={password}/> 
+  <div>
+  {errors.length > 0 && (
+    <div className="error-container">
+      {errors.map((error, index) => (
+        <p key={index} className="error-messages2 absolute -mt-6 text-xs text-red-500 left-0">
+          {error}
+        </p>
+      ))}
+    </div>
   )}
+ 
+</div>
 
 </div>
 
@@ -595,6 +726,12 @@ export default function Form2() {
       </div>
  
 
+      {errors.length > 0 && (
+        <>
+          <br />
+          <br />
+        </>
+      )}
 </div>
 </div>
 <div className='cont-remen'>

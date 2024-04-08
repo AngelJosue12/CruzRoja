@@ -47,6 +47,7 @@ export const NivelSeguridad = ({ password }) => {
             case 5:
                 return 'green'; // Muy fuerte
             default:
+                return 'black'; // Default color
         }
     };
 
@@ -54,30 +55,45 @@ export const NivelSeguridad = ({ password }) => {
         switch (strength) {
             case 0:
             case 1:
-                return ''; // Débil
+                return 'Débil';
             case 2:
             case 3:
-                return ''; // Moderado
+                return 'Moderado';
             case 4:
-                return ''; // Fuerte
+                return 'Fuerte';
             case 5:
-                return ''; // Muy fuerte
+                return 'Muy fuerte';
             default:
+                return ''; // Default text
         }
     };
 
     return (
-        <div style={{ marginBottom: '-20px', marginTop: '10px', textAlign:'center' }}>
-            <div
-                style={{
-                    width: `${(strength / 5) * 100}%`,
-                    height: '6px',
-                    backgroundColor: getStrengthColor(),
-                    marginBottom: '-21px',
-                    borderRadius:'5px'
-                }}
-            />
-          
-        </div>
+        password && (
+            <div style={{ marginBottom: '10px', textAlign: 'center' }}>
+                <span
+                    style={{
+                        color: getStrengthColor(),
+                        display: 'inline-block',
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        maxWidth: '130%',
+                        marginBottom: '-1px',
+                        marginLeft: '1px',
+                        fontSize: '12px'
+                    }}
+                >
+                    Nivel de Seguridad: {getStrengthText()}
+                </span>
+                <div
+                    style={{
+                        width: `${(strength / 5) * 100}%`,
+                        height: '6px',
+                        backgroundColor: getStrengthColor(),
+                        borderRadius: '5px'
+                    }}
+                />
+            </div>
+        )
     );
 };

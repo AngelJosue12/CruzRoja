@@ -18,16 +18,21 @@ import Confirm from '../MultiForm/Steps/Confirm'
 import { StepperContext } from '../MultiForm/contexts/StepperContext';
 import { useAuth } from '../Contexts/AuthContexts';
 import '@tailwindcss/forms'
+import { LoadingOutlined } from '@ant-design/icons';
+import { Spin } from 'antd';
 
 
 export default function RecuperarContraseña() {
 
-  const { token, setToken } = useAuth();
+  const { sig, metodo, token, isMethodSelected, contraActualizar2, contraActualizar, correo, numero, contraCo, contraCo2 } = useAuth();
 
 
   const [messageApi, contextHolder] = message.useMessage();
 
- 
+ //boleano para que se espere a que termine la animacion 
+ const [actionFinished, setActionFinished] = useState(false);
+
+
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const email = params.get('email');
@@ -62,36 +67,96 @@ export default function RecuperarContraseña() {
     }
 
 const handleClick = async (direction) => {
+  /// empieza el handeclick
   const requestBody = {
-    correo: email
+    correo: correo
+  };
+  const requestBody2 = {
+    correo: correo,
+    nuevaContraseña: contraActualizar
   };
 
   if (currentStep === 1 && direction === 'Siguiente') {
-    fetch(`http://localhost:3000/recuperacionCorreo/${encodeURIComponent(email)}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(requestBody),
-      credentials: 'include'
-    })
-    .then(response => response.json())
-    .then(result => {
-      if (result.mensaje === "Correo de recuperación enviado correctamente") {
-        console.log('exito enviado correo');
+    if (!isMethodSelected) {
+      message.error('Por favor, seleccione un método de recuperación para continuar.');
+      return; // Detener la ejecución si no se ha seleccionado ningún método
+    }
+    else if (metodo === 'correo') {
+ 
+
+      if( correo == null){
+        message.error('Por favor, ingresa tu correo electrónico para continuar.');
+        return;
+      }else{
+        /// enviando el mensaje 
+        message.loading('Verficando...',1);
+  fetch(`http://localhost:3000/recuperacionCorreo/${encodeURIComponent(correo)}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(requestBody),
+    credentials: 'include'
+  })
+   
+  .then(response => response.json())
+  .then(async result => {
+    if (result.mensaje === "Correo de recuperación enviado correctamente") {
+      console.log('exito enviado correo');
+    
+      setTimeout(() => {
         let newStep = currentStep + 1;
         setCurrentStep(newStep);
+        setActionFinished(true) // Resuelve la promesa con true después de que se complete la animación
+      }, 200);
+    ;
+    } else if (result.mensaje === 'Error al enviar el correo electrónico') {
+      message.error(' Introduce un correo electrónico válido y funcional.');
+    } 
+  })
+  .catch(error => {
+    console.error('Error al enviar:', error);
+    setTimeout(() => {
+      message.error('Error al enviar el Token. Por favor, intenta de nuevo más tarde.');
+    }, 900);
+  });
+
       }
-    })
-    .catch(error => {
-      console.error('Error al enviar:', error);
-      message.error('Error al enviar. Por favor, intenta de nuevo más tarde.');
-    });
+      }else if (metodo === 'sms') {
+        if(numero == null){
+          message.error('Por favor, ingresa tu Numero Telefonico para continuar.');
+          return;
+        }else{
+            // Lógica para enviar el token por SMS
+      fetch(`URL_PARA_ENVIAR_TOKEN_POR_SMS`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(requestBody),
+        credentials: 'include'
+      })
+        .then(response => response.json())
+        .then(result => {
+          if (result.mensaje === "Token de recuperación enviado correctamente por SMS") {
+            console.log('exito enviado SMS');
+            setActionFinished(true);
+           // let newStep = currentStep + 1;
+            //setCurrentStep(newStep);
+          }
+        })
+        .catch(error => {
+          console.error('Error al enviar:', error);
+          setTimeout(() => {
+            message.error('Error al enviar el Token. Por favor, intenta de nuevo más tarde.');
+          }, 1100);
+        });
+        }
+    }
   }
   
   if (currentStep === 2 && direction === 'Siguiente') {
     
-  
     const tokenIsValid = await verifyToken(); 
     if (token == null) {
       message.error('El campo no puede estar vacío');}// Esperar a que verifyToken termine
@@ -102,10 +167,69 @@ const handleClick = async (direction) => {
     
   }
 
-  let newStep = currentStep;
-  direction === 'Siguiente' ? newStep++ : newStep--;
+  if (currentStep === 3 && direction === 'Siguiente') {
+    if (contraActualizar === null && contraActualizar2 === null) {
+      message.error('Para continuar acomplete  los campos correctamente');
+      return;
+    } else if (contraActualizar2 === null){
+      message.error('Para continuar acomplete  los campos correctamente');
+    }else if(contraActualizar !== null && contraActualizar2 !== null) {
+      console.log(contraActualizar)
+      console.log(contraCo)
+      if(contraCo === false && contraCo2 === false){
+        message.warning('Porfavor atienda los errores que se le muestran');
+        return;
+      }else if (contraCo === true && contraCo2 === true ){
 
-  newStep > 0 && newStep <= steps.length && setCurrentStep(newStep);
+        fetch(`http://localhost:3000/actualizarContraRecuperacion`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(requestBody2),
+          credentials: 'include'
+        })
+          .then(response => response.json())
+          .then(result => {
+            if (result.mensaje === "Contraseña actualizada correctamente") {
+                    console.log('Actualizacion correcta');
+                   
+                    const isSuccess =  success3();
+                    setTimeout(() => {
+                      let newStep = currentStep + 1;
+                      setCurrentStep(newStep);
+                      setActionFinished(true) // Resuelve la promesa con true después de que se complete la animación
+                    }, 1500);
+                    return isSuccess;
+                  
+            }
+          })
+          .catch(error => {
+            console.error('Error al actulizar:', error);
+              message.error('Error al actualizar la contraseña, intenta de nuevo más tarde.');
+           
+          });
+      }
+    }
+}
+
+ // let newStep = currentStep;
+ // direction === 'Siguiente' ? newStep++ : newStep--;
+
+ // newStep > 0 && newStep <= steps.length && setCurrentStep(newStep);
+
+
+ if (actionFinished === true) {
+
+  let newStep = currentStep;
+ direction === 'Siguiente' ? newStep++ : newStep--;
+
+ newStep > 0 && newStep <= steps.length && setCurrentStep(newStep);
+  // Reiniciar la variable de estado para futuros usos
+  setActionFinished(false);
+}
+
+  //termina el handeclick
 }
 
 const verifyToken = async () => {
@@ -114,11 +238,11 @@ const verifyToken = async () => {
     return false;
   } else {
     const requestBody = {
-      correo: email,
+      correo: correo,
       tokenUsuario: token
     };
     try {
-      const response = await fetch(`http://localhost:3000/compararToken/${encodeURIComponent(email)}`, {
+      const response = await fetch(`http://localhost:3000/compararToken/${encodeURIComponent(correo)}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -133,7 +257,12 @@ const verifyToken = async () => {
         return isSuccess;
        
       } else if (result.mensaje === "El token de recuperación es inválido") {
-        message.error('El token de recuperación es inválido.');
+        const isSuccess = await success2(); // Espera a que se resuelva la promesa de success
+        return isSuccess;
+        return false;
+      } else if (result.mensaje === "El token de recuperación ha expirado") {
+        const isSuccess = await success4(); // Espera a que se resuelva la promesa de success
+        return isSuccess;
         return false;
       }
     } catch (error) {
@@ -148,17 +277,45 @@ const success = async () => {
   message.loading({ content: 'Verificando..', duration: 2 });
   return new Promise((resolve) => {
     setTimeout(() => {
-      message.success({ content: 'Correcto', duration: 1.3 });
+      message.success({ content: 'Token Correcto', duration: 1.3 });
       resolve(true); // Resuelve la promesa con true después de que se complete la animación
     }, 1700); // Ajusta este valor según sea necesario
   });
 };
 
+const success2 = async () => {
+  message.loading({ content: 'Verificando..', duration: 2 });
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      message.error({ content: 'Token Incorrecto', duration: 1.3 });
+      resolve(false); // Resuelve la promesa con true después de que se complete la animación
+    }, 1700); // Ajusta este valor según sea necesario
+  });
+};
 
 
+const success3 = async () => {
+  message.loading({ content: 'Actualizando Datos..', duration: 2 });
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      message.success({ content: 'Datos Actualizados', duration: 1.3 });
+      resolve(true); // Resuelve la promesa con true después de que se complete la animación
+    }, 1700); // Ajusta este valor según sea necesario
+  });
+};
+
+const success4 = async () => {
+  message.loading({ content: 'Verificando..', duration: 2 });
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      message.success({ content: 'El token ha expirado', duration: 1.3 });
+      resolve(true); // Resuelve la promesa con true después de que se complete la animación
+    }, 1700); // Ajusta este valor según sea necesario
+  });
+};
     
     return (
-      <div className="md:w-2/3 mx-auto my-20 shadow-2xl rounded-3xl pb-2 bg-white mt-10  border-300 ">
+      <div className="md:w-2/3 mx-auto my-20 shadow-2xl rounded-3xl pb-2 bg-white mt-10  border-300 mul ">
       {/*Spetter */}
       <div className="container horizontal mt-5 ">
         <Stepper

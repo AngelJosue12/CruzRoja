@@ -72,17 +72,14 @@ export default function Nav() {
   
   
   const handleLogout = () => {
-    message.loading('Cerrando Sesión', 1.5) // Establece la duración del mensaje de carga en 1.5 segundos
+    message.loading('Cerrando Sesión', 2.5) // Establece la duración del mensaje de carga en 1.5 segundos
       .then(() => {
         setIsAuthenticated(false);
         // Elimina la cookie del token JWT
         document.cookie = 'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
- 
+        navigate('/Login');
       });
-
-      setTimeout(() => {
-        navigate('/');
-      }, 20000); 
+      
   };
 
   // Función para obtener un color aleatorio

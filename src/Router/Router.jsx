@@ -16,6 +16,7 @@ import Terminos from '../Pages/Terminos y Politicas/Terminos'
 import Politicas from '../Pages/Terminos y Politicas/Politicas'
 import PoliCokkies from '../Pages/PoliticasCookies/PoliCokkies'
 import Perfil from '../Pages/User/Perfil'
+import DobleFactor from '../Components/Form/DobleFactor'
 //import components.....
  import Nav from '../Components/Nav/Nav'
  import Footer from '../Components/Footer/Footer'
@@ -81,7 +82,7 @@ export default function Router() {
         <Route path="/Terminos" element={<Terminos />} />
         <Route path="/Politicas" element={<Politicas />} />
         <Route path="/Cookies" element={<PoliCokkies />} />
-
+        <Route path="/DobleFactor" element={<DobleFactor />} />
         {/* Ruta para el perfil */}
         <Route
         path="/Perfil"

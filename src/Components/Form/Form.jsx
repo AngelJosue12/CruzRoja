@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { message } from 'antd';
+import { message, Spin, Alert, Flex  } from 'antd';
 import { FaFacebookF, FaGithub, FaLinkedinIn } from "react-icons/fa";
 import { IoEyeSharp } from "react-icons/io5";
 import { FaEyeSlash } from "react-icons/fa";
@@ -19,24 +19,7 @@ import { CheckCircleOutlined, CloseCircleOutlined, InfoCircleOutlined, Exclamati
 
 export default function Form() {
 
-
-  const { setIsAuthenticated } = useAuth();
-
-  function getCookie(name) {
-    const cookies = document.cookie.split(';');
-    for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i].trim();
-        // Verifica si la cookie actual comienza con el nombre proporcionado
-        if (cookie.startsWith(name + '=')) {
-            // Retorna el valor de la cookie
-            return cookie.substring(name.length + 1);
-        }
-    }
-    // Si no se encuentra la cookie, retorna null
-    return null;
-}
-
-
+  const { setCorreoGuardar } = useAuth();
 
 
   const navigate = useNavigate();
@@ -49,33 +32,6 @@ export default function Form() {
   const maxAttempts = 4;
   const encodedEmail = btoa(email);
 
-  const openNotificationWithIcon = (type) => {
-    const icon = type === 'success' ? <CheckCircleOutlined style={{ color: '#52c41a' }} /> :
-                 type === 'info' ? <InfoCircleOutlined style={{ color: '#1890ff' }} /> :
-                 type === 'warning' ? <ExclamationCircleOutlined style={{ color: '#faad14' }} /> :
-                 <CloseCircleOutlined style={{ color: '#ff4d4f' }} />;
-  
-    const backgroundColor = type === 'success' ? '#f6ffed' :
-                            type === 'info' ? '#f0f5ff' :
-                            type === 'warning' ? '#fff7e6' :
-                            '#fff1f0';
-  
-    notification.open({
-      message: 'Notification Title',
-      description: 'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
-      icon: icon,
-      style: {
-        backgroundColor: backgroundColor,
-        border: `1px solid ${type === 'success' ? '#b7eb8f' :
-                                 type === 'info' ? '#91d5ff' :
-                                 type === 'warning' ? '#ffe58f' :
-                                 '#ffccc7'}`
-      },
-      duration: 3 // Cambia la duración según tus preferencias
-    });
-  };
-
-  
 
 
   const handleSubmit = (event) => {
@@ -84,7 +40,14 @@ export default function Form() {
     const captchaValue = captcha.current.getValue();
   
     if (!captchaValue) {
-     openNotificationWithIcon('warning');
+      message.warning({
+        content: 'Por favor, Realiza el captcha para proseguir.',
+        duration: 2, // Duración en segundos antes de que el mensaje desaparezca automáticamente
+        style: {
+          marginTop: '70px', // Ajusta la distancia vertical desde la parte superior
+          marginRight: '-990px', // Ajusta la distancia horizontal desde el borde derecho
+        },
+      });
       return;
     }
   
@@ -112,53 +75,40 @@ export default function Form() {
         .then(response => response.json())
         .then(result => {
           if (result.mensaje === "Autenticación exitosa") {
-
-
-            const token = getCookie('jwt');
-
-            let nombre; // Declarar la variable fuera de try
-            let Authenticated
-            if (token) {
-              try {
-                // Decodifica el token JWT
-                const decodedToken = jwtDecode(token);
-                nombre = decodedToken.nombre;
-                Authenticated =decodedToken.IsAuthenticated 
-              } catch (error) {
-                console.error('Error al decodificar el token JWT:', error);
-                // Maneja el error según sea necesario
-              }
-            } else {
-              console.error('No se encontró la cookie "jwt"');
-              // Maneja el caso en que no se encuentra la cookie según sea necesario
-            }
-            
-            message.loading('Cargando', 2);
-            
+            verificacionCorreoTokenEnviar(email);
+            setCorreoGuardar(email);
+            message.loading('Verficando...',2);
             setTimeout(() => {
-              if (nombre) { // Comprueba si nombre tiene un valor válido
-                message.success(`Autenticación exitosa. Bienvenido, ${nombre}`, 2);
-              } else {
-                message.success('Autenticación exitosa', 2);
-              }
-              navigate('/');
-              setIsAuthenticated(Authenticated);
-            }, 2000);
+              navigate('/DobleFactor');
+            }, 2200);
+         
             
           }  else if (result.mensaje === "Este correo no coincide con ningún correo registrado") {
             message.error('Este correo no coincide con ningún correo registrado');
           }else{
             // Autenticación fallida
             if (result.mensaje === "Tu cuenta está bloqueada") {
-              message.error('Tu cuenta está bloqueada. No puedes iniciar sesión.');
+              message.loading('Verficando...',1);
+              setTimeout(() => {
+                message.error('Tu cuenta está bloqueada. No puedes iniciar sesión.');
+              }, 1200);
+              
             } else if (attemptCount < maxAttempts - 1) {
-              setAttemptCount(prevCount => prevCount + 1);
-              message.error(`Contraseña incorrecta. Te quedan ${maxAttempts - attemptCount - 1} intentos.`);
+              message.loading('Verficando...',1);
+              setTimeout(() => {
+                setAttemptCount(prevCount => prevCount + 1);
+                message.error(`Contraseña incorrecta. Te quedan ${maxAttempts - attemptCount - 1} intentos.`);
+              }, 1200);
+
             } else {
-              setAttemptCount(prevCount => prevCount + 1);
-              message.error('Has excedido el límite de intentos. Tu cuenta ha sido bloqueada por seguridad.');
-              bloquearCuenta(email);
-              NotiCuentaBloqueada(email)
+              message.loading('Verficando...',1);
+              setTimeout(() => {
+                message.error('Has excedido el límite de intentos. Tu cuenta ha sido bloqueada por seguridad.');
+                setAttemptCount(0);
+                bloquearCuenta(email);
+                NotiCuentaBloqueada(email)
+              }, 1200);
+       
             }
           }
         })
@@ -168,6 +118,7 @@ export default function Form() {
         });
     } else {
       console.log('Formulario no válido');
+      message.warning('Para continuar Acomplete todo los campos');
     }
   };
   
@@ -197,6 +148,38 @@ export default function Form() {
     });
   };
   
+
+
+  const verificacionCorreoTokenEnviar = (email) => {
+    const requestBody = {
+      correo: email
+    };
+  
+    fetch(
+      `http://localhost:3000/enviarverificacionCorreo/${encodeURIComponent(email)}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(requestBody)
+      }
+    )
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Error al enviar el correo de verificación'); // Manejar errores de solicitud HTTP
+      }
+      console.log('Correo de verificación enviado exitosamente');
+      // Puedes agregar aquí cualquier manejo adicional después de enviar el correo
+    })
+    .catch(error => {
+      console.error('Error al enviar el correo de verificación:', error); // Manejar errores de red o del servidor
+      // Puedes mostrar un mensaje de error al usuario u otro tipo de manejo de errores
+    });
+  };
+
+
+
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (email === '') {
@@ -293,7 +276,7 @@ export default function Form() {
           <span>Introduce tu Correo y Contraseña</span>
           <div className="mt-1 grid grid-cols-1 gap-x-1gap-y-4 sm:grid-cols-6">
             <div className="sm:col-span-4">
-              <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">Correo</label>
+              <label htmlFor="email" className="block text-sm font-medium leading text-gray-900">Correo</label>
               <div className="mt-3">
                 <input
                   id="email"
@@ -306,8 +289,8 @@ export default function Form() {
                   autoComplete="email"
                   className={`block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 ${emailError ? 'input-error' : ''}`} />
               </div>
-              <div className="errores">
-              {emailError && <p className="error-message absolute  left-30">{emailError}</p>}
+              <div className="erroresInicio">
+              {emailError && <p className="error-messageInicio absolute  left-30">{emailError}</p>}
               </div>
 
             </div>
@@ -315,7 +298,7 @@ export default function Form() {
 
           <div className="mt-1 grid grid-cols-1 gap-x-1 gap-y-4 sm:grid-cols-6">
             <div className="sm:col-span-4">
-              <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">Contraseña</label>
+              <label htmlFor="email" className="block text-sm font-medium leading text-gray-900">Contraseña</label>
               <div className="mt-3 relative rounded-md shadow-sm">
                 <input
                   id="password"
@@ -337,17 +320,15 @@ export default function Form() {
                   )}
                 </button>
               </div>
-             <div className="errores">
+             <div className="erroresInicio">
              {passwordError && (
-                <p className="error-message absolute  left-30">{passwordError}</p>
+                <p className="error-messageInicio absolute  left-30">{passwordError}</p>
               )}
              </div>
         
             </div>
           </div>
-
-
-          
+ 
  
           <div className='cont-remen'>
             <ReCAPTCHA
@@ -356,7 +337,7 @@ export default function Form() {
               onChange={handleChangeCaptcha}
             />
           </div>
-          <Link to={`/Recuperacion?email=${(email)}`}>
+          <Link to={'/Recuperacion'}>
             Olvidaste tu Contraseña?
           </Link>
           <button className='button2' type="submit" >Iniciar Sesión</button>
@@ -370,6 +351,7 @@ export default function Form() {
             Iniciar Sesion con Google
             
           </button>
+        
           <div className='cont-remen2'>
             <p className='cuenta2'>¿No tienes una Cuenta?</p>
             <Link to={'/Registro'} >
