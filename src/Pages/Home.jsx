@@ -11,9 +11,13 @@ import Blog from '../Components/Blog/Blog'
 import Ayuda from '../Components/Ayuda/Ayuda'
 import Valores from '../Components/Valores/Valores'
 import SwiperDemo from '../Components/Slider/Slider'
-
+import VideoY from '../Components/VideoY/VideoY';
+import AnuncioServicios from '../Components/AnuncioServicios/AnuncioServicios';
 export default function Home() {
  
+
+
+
   return (
     <>
     <Ayuda/>
@@ -21,7 +25,9 @@ export default function Home() {
   <Brands/>
  
   <Quote/> 
-   <Valores/>*/}
+   <Valores/>
+    <AnuncioServicios />
+ */}
 
  <SwiperDemo/>
    {/*
@@ -29,8 +35,10 @@ export default function Home() {
   <PopularBooks/>
  */}
     <Blog/>
+   <VideoY/>
     <LstestArticle/>
     </>
     
-  )
+  );
 }
+

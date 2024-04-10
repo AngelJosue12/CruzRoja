@@ -22,14 +22,30 @@ import DobleFactor from '../Components/Form/DobleFactor'
  import Footer from '../Components/Footer/Footer'
  import './Router.css'
  import { message } from 'antd';
+ import { useState, useEffect } from 'react'
+ import CookieBanner from '../Components/Cookies/Cookies'
 
  import Contenido from '../Components/ChatBot/Contenido/Contenido'
 
 export default function Router() {
   const { isAuthenticated } = useAuth();
 
- 
+  const [showCookieBanner, setShowCookieBanner] = useState(false);
 
+  useEffect(() => {
+    const cookiesAccepted = localStorage.getItem('cookiesAccepted');
+    if (!cookiesAccepted) {
+      setShowCookieBanner(true);
+    }
+  }, []);
+
+  const handleAcceptCookies = () => {
+    localStorage.setItem('cookiesAccepted', 'true');
+    setShowCookieBanner(false);
+  };
+
+
+  
   const showMessage = (msg) => {
     message.info(msg);
   };
@@ -70,8 +86,10 @@ export default function Router() {
 
   return (  
     <BrowserRouter>
+        {showCookieBanner && <CookieBanner onAccept={handleAcceptCookies} />}
     <Nav/>
     <div className="mPan"><Breadcrumbs/></div>
+
     <Routes>
        {/* Rutas públicas */}
        <Route path="/" element={<Home />} />
