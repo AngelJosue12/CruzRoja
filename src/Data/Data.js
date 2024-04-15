@@ -10,22 +10,22 @@ export const navLinks = [
   {
     name: 'Conocenos',
     icon: IoMdContacts,
-    path: '/Conocenos'
+    path: 'Conocenos'
   },
   {
     name: 'Servicios',
     icon: MdMedicalServices,
-    path: '/Servicios'
+    path: 'Servicios'
   },
   {
     name: 'Citas',
     icon: IoCalendarNumberSharp,
-    path: '/Citas'
+    path: 'Citas'
   },
   {
     name: 'Donaciones',
     icon: FaDonate,
-    path: '/Donaciones'
+    path: 'Donaciones'
   },
  
 ];
@@ -34,12 +34,12 @@ export const authLinks = [
   {
     name: 'Login',
     icon: FaUserCircle,
-    path: '/Login'
+    path: 'Login'
   },
   {
     name: 'Registro',
     icon: FaRegAddressBook,
-    path: '/Registro'
+    path: 'Registro'
   }
 ];
   

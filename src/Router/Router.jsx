@@ -93,27 +93,27 @@ export default function Router() {
     <Routes>
        {/* Rutas públicas */}
        <Route path="/" element={<Home />} />
-        <Route path="/Servicios" element={<Servicios />} />
-        <Route path="/Recuperacion" element={<RecuperarContraseña />} />
-        <Route path="/Token" element={<Token />} />
-        <Route path="/Restablece" element={<Restablece />} />
-        <Route path="/Terminos" element={<Terminos />} />
-        <Route path="/Politicas" element={<Politicas />} />
-        <Route path="/Cookies" element={<PoliCokkies />} />
-        <Route path="/DobleFactor" element={<DobleFactor />} />
+        <Route path="Servicios" element={<Servicios />} />
+        <Route path="Recuperacion" element={<RecuperarContraseña />} />
+        <Route path="Token" element={<Token />} />
+        <Route path="Restablece" element={<Restablece />} />
+        <Route path="Terminos" element={<Terminos />} />
+        <Route path="Politicas" element={<Politicas />} />
+        <Route path="Cookies" element={<PoliCokkies />} />
+        <Route path="DobleFactor" element={<DobleFactor />} />
         {/* Ruta para el perfil */}
         <Route
-        path="/Perfil"
+        path="Perfil"
         element={getPerfilUser()}
       />
 
   
           <Route
-            path="/Login"
+            path="Login"
             element={getLoginElement()}
           />
           <Route
-            path="/Registro"
+            path="Registro"
             element={getRegistrerElement()}
           />
 
