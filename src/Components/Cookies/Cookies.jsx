@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import {Link} from 'react-router-dom';
 import './Cookies.css';
 import cookieimg from './cookie.png';
 
@@ -33,8 +34,11 @@ function CookieBanner({ onAccept }) {
       <a href="#" className="confirm-button" onClick={handleAcceptClick}>
         Aceptar
       </a>
-      <a href="/Cookies" className="second-button">
+      <a className="second-button">
+      <Link className='second-button' to={'/Cookies'} >
       Consulta nuestra política de Cookies.
+      </Link>
+      
       </a>
     </div>
   );

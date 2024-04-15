@@ -8,24 +8,24 @@ export const navLinks = [
     path: '/'
   },
   {
-    name: 'Conócenos',
+    name: 'Conocenos',
     icon: IoMdContacts,
-    path: '/conocenos'
+    path: '/Conocenos'
   },
   {
     name: 'Servicios',
     icon: MdMedicalServices,
-    path: '/servicios'
+    path: '/Servicios'
   },
   {
     name: 'Citas',
     icon: IoCalendarNumberSharp,
-    path: '/citas'
+    path: '/Citas'
   },
   {
     name: 'Donaciones',
     icon: FaDonate,
-    path: '/donaciones'
+    path: '/Donaciones'
   },
  
 ];
@@ -34,12 +34,12 @@ export const authLinks = [
   {
     name: 'Login',
     icon: FaUserCircle,
-    path: '/login'
+    path: '/Login'
   },
   {
     name: 'Registro',
     icon: FaRegAddressBook,
-    path: '/registro'
+    path: '/Registro'
   }
 ];
   
