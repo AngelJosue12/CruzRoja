@@ -86,7 +86,7 @@ export default function Router() {
 
   return (  
     <BrowserRouter>
-        {showCookieBanner && <CookieBanner onAccept={handleAcceptCookies} />}
+        {showCookieBanner && <CookieBanner className="" onAccept={handleAcceptCookies} />}
     <Nav/>
     <div className="mPan"><Breadcrumbs/></div>
 
