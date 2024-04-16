@@ -1,5 +1,6 @@
 import React from 'react';
-import { createRoot } from 'react-dom'; // Importa createRoot desde react-dom en lugar de ReactDOM
+import { createRoot } from "react-dom/client";
+
 import App from './App.jsx';
 import { AuthProvider } from './Components/Contexts/AuthContexts.jsx';
 

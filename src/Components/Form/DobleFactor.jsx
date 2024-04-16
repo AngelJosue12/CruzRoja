@@ -14,14 +14,116 @@ import LoginImg2 from '../../assets/img/logo.png';
 import './DobleFactor.css';
 import { Button, Space, notification } from 'antd';
 import { CheckCircleOutlined, CloseCircleOutlined, InfoCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
-
+import OtpInput from '../InputOTP/Otp';
 
 
 export default function Doblefactor() {
 
 
+  //------------INPUT OTP--------------
+
+  const length = 6; // Longitud predeterminada del OTP
+  const [otp, setOtp] = useState(new Array(length).fill(""));
+  const inputRefs = useRef([]);
+
+  useEffect(() => {
+    if (inputRefs.current[0]) {
+      inputRefs.current[0].focus();
+    }
+  }, []);
+
+  const handleChange = (index, e) => {
+    const value = e.target.value;
+    if (isNaN(value)) return;
+  
+    const newOtp = [...otp];
+    newOtp[index] = value; // Actualizamos el valor en la posición correspondiente
+    setOtp(newOtp);
+  
+    // Si el valor actual está completo y hay un siguiente input, enfocamos en el siguiente
+    if (value.length === 1 && index < length - 1 && inputRefs.current[index + 1]) {
+      inputRefs.current[index + 1].focus();
+    }
+  
+    // Combinamos el código OTP completo
+    combineOtp();
+  };
+  
+  const handlePaste = (e) => {
+    e.preventDefault(); // Evitar que se pegue el texto directamente en los campos de entrada
+    const pasteData = e.clipboardData.getData("Text");
+    const pasteArray = pasteData.split("").filter(char => !isNaN(char)); // Filtramos solo los dígitos
+  
+    const newOtp = [...otp];
+  
+    // Llenamos el nuevo arreglo con los dígitos del código OTP pegado
+    pasteArray.forEach((char, index) => {
+      if (index < length) {
+        newOtp[index] = char;
+      }
+    });
+  
+    // Actualizamos el estado del OTP con el nuevo arreglo
+    setOtp(newOtp);
+  
+    // Combinamos el código OTP completo
+    combineOtp();
+  };
+  
+ // Función para combinar el código OTP completo
+const combineOtp = () => {
+  const combinedOtp = otp.join(""); 
+  setTokenUser(combinedOtp);//
+ // console.log(setTokenUser) //Combinamos los dígitos del OTP en un solo string
+  if (combinedOtp.length === length) {
+    console.log("Código OTP completo:", combinedOtp);
+    // Aquí puedes realizar cualquier acción que necesites con el código OTP completo
+  }
+};
+
+// Efecto secundario para combinar el código OTP completo cada vez que cambia
+useEffect(() => {
+  combineOtp();
+}, [otp]);
+
+
+  const handleClick = (index) => {
+    inputRefs.current[index].setSelectionRange(1, 1);
+
+    // opcional
+    if (index > 0 && !otp[index - 1]) {
+      inputRefs.current[otp.indexOf("")].focus();
+    }
+  };
+
+
+
+
+
+  const handleKeyDown = (index, e) => {
+    if (
+      e.key === "Backspace" &&
+      !otp[index] &&
+      index > 0 &&
+      inputRefs.current[index - 1]
+    ) {
+      // Mover el foco al campo de entrada anterior en retroceso
+      combineOtp(); 
+      inputRefs.current[index - 1].focus();
+    } else if (e.key === "Tab" && index < length - 1) {
+      // Mover al siguiente campo de entrada al presionar la tecla Tab
+      inputRefs.current[index + 1].focus();
+    }
+  };
+
+
+
+
+
+  //////////////////////////----------------------------
+
   const { setIsAuthenticated, correoGuardar } = useAuth();
-  console.log(correoGuardar);
+
   function getCookie(name) {
     const cookies = document.cookie.split(';');
     for (let i = 0; i < cookies.length; i++) {
@@ -36,7 +138,7 @@ export default function Doblefactor() {
     return null;
 }
 
-
+const correo = correoGuardar;
 const [spinning, setSpinning] = React.useState(false);
 const showLoader = () => {
   setSpinning(true);
@@ -51,7 +153,7 @@ const showLoader = () => {
   const captcha = useRef(null);
 
 
-
+  
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -123,6 +225,9 @@ const showLoader = () => {
           }  else if (result.mensaje === "El token de verificación es inválido") {
             message.error('El token de verificación es inválido');
           }
+          else if (result.mensaje === "El token de verificación ha expirado") {
+            message.error('El token de verificación ha expirado');
+          }
         })
         .catch(error => {
           console.error('Error al Verificar la Identidad:', error);
@@ -151,6 +256,7 @@ const showLoader = () => {
   };
 
   const handleChangeCaptcha = () => {
+    
     const captchaValue = captcha.current.getValue();
     if (captchaValue) {
       console.log("éxito");
@@ -176,6 +282,79 @@ const showLoader = () => {
 
 
 
+  const [remainingTime, setRemainingTime] = useState(60); // 1 minuto en segundos
+  const [isResendEnabled, setIsResendEnabled] = useState(false);
+  const [hasExpiredOnce, setHasExpiredOnce] = useState(false); 
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setRemainingTime(prevTime => prevTime - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    if (remainingTime <= 0 && !hasExpiredOnce) {
+      setIsResendEnabled(true);
+      setHasExpiredOnce(true); // Marcar que ha expirado una vez
+
+      // Llamar a la ruta para actualizar el token solo si remainingTime llega a 0
+      fetch("http://localhost:3000/actualizarToken", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ correo: correoGuardar })
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        console.log('EXPIRADO');
+        // Puedes agregar cualquier manejo adicional aquí después de actualizar el token
+      })
+      .catch(error => {
+        console.error('Error al actualizar el token:', error);
+        // Maneja los errores según sea necesario
+      });
+    }
+  }, [remainingTime, hasExpiredOnce]);
+
+
+
+  
+  const handleResend = () => {
+    const requestBody = {
+      correo: correoGuardar
+    };
+  
+    fetch(
+      `http://localhost:3000/enviarverificacionCorreo/${encodeURIComponent(correoGuardar)}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(requestBody)
+      }
+    )
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Error al enviar el correo de verificación'); // Manejar errores de solicitud HTTP
+      }
+      console.log('Correo de verificación enviado exitosamente');
+      setRemainingTime(60);
+    setIsResendEnabled(false);
+    setHasExpiredOnce(false);
+      // Puedes agregar aquí cualquier manejo adicional después de enviar el correo
+    })
+    .catch(error => {
+      console.error('Error al enviar el correo de verificación:', error); // Manejar errores de red o del servidor
+      // Puedes mostrar un mensaje de error al usuario u otro tipo de manejo de errores
+    });
+  };
+  
+
   return (
     <div className={containerClass} id="container">
          <Spin spinning={spinning} fullscreen />
@@ -184,10 +363,60 @@ const showLoader = () => {
         <form onSubmit={handleSubmit}>
 
           <h3 className='title-form'>Verificacion Doble Factor</h3>
+          <span>Favor de introducir el Token que fue enviado a <strong>{correo}</strong> . En caso de que no le haya llegado revise su span o recargue su bandeja de recibidos, agredecemos su cooperacion.</span>
+
+          <div className="otp-container">
+      {otp.map((value, index) => {
+        return (
+          <input
+            key={index}
+            type="text"
+            ref={(input) => (inputRefs.current[index] = input)}
+            value={value}
+            onChange={(e) => handleChange(index, e)}
+            onClick={() => handleClick(index)}
+            onKeyDown={(e) => handleKeyDown(index, e)}
+            onPaste={(e) => handlePaste(e)} // Manejar el pegado
+            className="otpInput"
+          />
+        );
+      })}
+    </div>
+
+          {isResendEnabled ? (
+  <button type='button' className="button5" onClick={handleResend} disabled={!isResendEnabled}>
+    Volver a enviar token
+  </button>
+) : (
+  <span>{`Volver a enviar token en ${Math.floor(remainingTime / 60)}:${remainingTime % 60}`}</span>
+)}
+
+
+ 
+          <div className='cont-remen'>
+            <ReCAPTCHA
+              ref={captcha}
+              sitekey="6LfXgm0pAAAAAA6yN5NyGT_RfPXZ_NLXu1eNoaQf"
+              onChange={handleChangeCaptcha}
+            />
+          </div>
          
-          <span>Favor de introducir el Token que fue enviado a .En caso de que no le haya llegado revise su span o recargue su bandeja de recibidos</span>
-          <div className="mt-1 grid grid-cols-1 gap-x-1gap-y-4 sm:grid-cols-6">
-            <div className="sm:col-span-4">
+          <button className='button2' type="submit" >Verificar</button>
+
+          <img src={LoginImg} className='img-login' alt="" />
+          <div className="feature-border container"></div>
+          <h4 className='title-form2'>Juntos Hacemos la Diferencia</h4>
+          <img src={LoginImg2} className='img-login4' alt="" />
+        </form>
+      </div>
+    </div>
+  );
+}
+
+
+
+
+{/* <div className="sm:col-span-4">
               <label htmlFor="tokenUser" className="block text-sm font-medium leading text-gray-900">Token</label>
               <div className="mt-3">
                 <input
@@ -205,29 +434,4 @@ const showLoader = () => {
               {tokenError && <p className="error-messageInicio absolute  left-30">{tokenError}</p>}
               </div>
 
-            </div>
-          </div>
-
-
- 
-          <div className='cont-remen'>
-            <ReCAPTCHA
-              ref={captcha}
-              sitekey="6LfXgm0pAAAAAA6yN5NyGT_RfPXZ_NLXu1eNoaQf"
-              onChange={handleChangeCaptcha}
-            />
-          </div>
-         
-          <button className='button2' type="submit" >Verificar</button>
-     
-        
-        
-          <img src={LoginImg} className='img-login' alt="" />
-          <div className="feature-border container"></div>
-          <h4 className='title-form2'>Juntos Hacemos la Diferencia</h4>
-          <img src={LoginImg2} className='img-login4' alt="" />
-        </form>
-      </div>
-    </div>
-  );
-}
+            </div> */}

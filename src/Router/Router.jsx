@@ -24,6 +24,7 @@ import DobleFactor from '../Components/Form/DobleFactor'
  import { message } from 'antd';
  import { useState, useEffect } from 'react'
  import CookieBanner from '../Components/Cookies/Cookies'
+ import Citas from '../Pages/Citas/Citas'
 
  import Contenido from '../Components/ChatBot/Contenido/Contenido'
 
@@ -101,6 +102,7 @@ export default function Router() {
         <Route path="Politicas" element={<Politicas />} />
         <Route path="Cookies" element={<PoliCokkies />} />
         <Route path="DobleFactor" element={<DobleFactor />} />
+        <Route path="Citas" element={<Citas />} />
         {/* Ruta para el perfil */}
         <Route
         path="Perfil"

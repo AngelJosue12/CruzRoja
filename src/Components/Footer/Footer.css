@@ -70,7 +70,7 @@ footer{
     }  
     .svg-container {
         position: relative; /* Posición absoluta para la imagen */
-        bottom: -40px; /* La imagen estará pegada en la parte inferior */
+        bottom: -10px; /* La imagen estará pegada en la parte inferior */
         left: 0; /* La imagen estará pegada en la esquina izquierda */
         width: 100%; /* Ancho completo */
         z-index: 0; /* Asegura que la imagen esté detrás del pie de página */

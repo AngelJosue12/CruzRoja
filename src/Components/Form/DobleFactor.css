@@ -201,4 +201,38 @@
 }
 
 
+.button5{
 
+    color: var(--color-dark);
+    font-size: 10px;
+    padding: 5px 10px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-weight: 100;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-top: 10px;
+    cursor: pointer;
+}
+.otp-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .otpInput {
+    /* Agrega estilos según sea necesario */
+    margin: 5px !important; /* Espacio entre cada input */
+    width: 40px !important;
+    height: 40px !important;
+    border: 1.5px solid #dbdada !important; /* Cambia el color del borde */
+  }
+ /* Estilo para resaltar cuando el input está enfocado */
+.otpInput:focus {
+    border-color: #69a3b4 !important; /* Cambia el color del borde cuando el input está enfocado */
+  }
+  
+  
+  /* Estilo para resaltar al pasar el cursor */
+  .otpInput:hover {
+    background-color: #dbdada !important; /* Cambia el color de fondo al pasar el cursor */
+  }
