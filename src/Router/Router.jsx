@@ -25,11 +25,17 @@ import DobleFactor from '../Components/Form/DobleFactor'
  import { useState, useEffect } from 'react'
  import CookieBanner from '../Components/Cookies/Cookies'
  import Citas from '../Pages/Citas/Citas'
+ import ProtectorRutas from './ProtectedRoute'
 
  import Contenido from '../Components/ChatBot/Contenido/Contenido'
 
 export default function Router() {
+
+  
   const { isAuthenticated } = useAuth();
+ const autentificado = isAuthenticated;
+ 
+  console.log(isAuthenticated);
 
   const [showCookieBanner, setShowCookieBanner] = useState(false);
 
@@ -47,42 +53,7 @@ export default function Router() {
 
 
   
-  const showMessage = (msg) => {
-    message.info(msg);
-  };
-
-  function getLoginElement() {
-    if (isAuthenticated === true) {
-      
-      return <Navigate to="/" replace />;
-    } else {
-      return <Login />;
-    }
-  }
   
-  function getRegistrerElement() {
-    if (isAuthenticated === true) {
-      return <Navigate to="/" replace />;
-    } else {
-      return <Registrer />;
-    }
-  }
-
-
-  function getPerfilUser(){
-    if (isAuthenticated == true) {
-      return <Perfil />;
-    } else {
-      return  <Navigate to="/Login" replace state={{ from: '/Perfil' }} />;
-    }
-  }
-  function AdminRoutes() {
-    return (
-      <>
-        <Route path="/Adm" element={<HomeAdmin />} />
-      </>
-    );
-  }
 
 
   return (  
@@ -104,27 +75,17 @@ export default function Router() {
         <Route path="DobleFactor" element={<DobleFactor />} />
         <Route path="Citas" element={<Citas />} />
         {/* Ruta para el perfil */}
-        <Route
-        path="Perfil"
-        element={getPerfilUser()}
-      />
+        
+        <Route element={<ProtectorRutas user={autentificado}/>}>
+          <Route path="Perfil" element={ <Perfil />}/>
+        </Route>
 
-  
-          <Route
-            path="Login"
-            element={getLoginElement()}
-          />
-          <Route
-            path="Registro"
-            element={getRegistrerElement()}
-          />
-
-     
+     <Route path='Login' element={ <Login/>}/>
+          <Route path="Registro" element={<Registrer/>}/>
 
         {/* Ruta para cualquier otro caso */}
         <Route path="*" element={<NotFound />} />
   
-        <Route path="/" element={<AdminRoutes />} />
     </Routes>
     <Contenido/>
     <Footer/>
@@ -133,3 +94,6 @@ export default function Router() {
     
   )
 }
+
+
+
