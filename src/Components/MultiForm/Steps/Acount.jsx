@@ -81,6 +81,7 @@ export default function Acount() {
           {selectedMethod === 'correo' && (
             <div className="">
               <br />
+              <p>Introduce el correo relacionado con tu cuenta</p>
               <input
                 type="email"
                 value={email}
@@ -100,7 +101,6 @@ export default function Acount() {
             <input
               type="checkbox"
               value="sms"
-              
               checked={selectedMethod === 'sms'}
               onChange={() => handleSelectRecoveryMethod('sms')}
             />
@@ -109,12 +109,17 @@ export default function Acount() {
           {selectedMethod === 'sms' && (
             <div className="">
               <br />
+              <p>Introduce el correo relacionado con tu cuenta</p>
               <input
-                type="tel"
-                value={phone}
-                onChange={handlePhoneChange}
-                placeholder="Número de teléfono"
+                type="email"
+                value={email}
+                onChange={handleEmailChange}
+                onBlur={() => validateEmail(email)}
+                placeholder="Correo electrónico"
               />
+               <div className="erroresInicio">
+              {emailError && <p className="error-messageInicio absolute  left-30">{emailError}</p>}
+              </div>
             </div>
           )}
 

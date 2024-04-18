@@ -123,34 +123,37 @@ const handleClick = async (direction) => {
 
       }
       }else if (metodo === 'sms') {
-        if(numero == null){
-          message.error('Por favor, ingresa tu Numero Telefonico para continuar.');
+        if(correo == null){
+          message.error('Por favor, ingresa tu correo electrónico para continuar.');
           return;
         }else{
-            // Lógica para enviar el token por SMS
-      fetch(`URL_PARA_ENVIAR_TOKEN_POR_SMS`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(requestBody),
-        credentials: 'include'
-      })
-        .then(response => response.json())
-        .then(result => {
-          if (result.mensaje === "Token de recuperación enviado correctamente por SMS") {
-            console.log('exito enviado SMS');
-            setActionFinished(true);
-           // let newStep = currentStep + 1;
-            //setCurrentStep(newStep);
-          }
-        })
-        .catch(error => {
-          console.error('Error al enviar:', error);
-          setTimeout(() => {
-            message.error('Error al enviar el Token. Por favor, intenta de nuevo más tarde.');
-          }, 1100);
-        });
+          message.loading('Verficando...', 1);
+            fetch('http://localhost:3000/recuperacionSMS', {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify(requestBody),
+              credentials: 'include'
+            })
+            .then(response => response.json())
+            .then(result => {
+              if (result.mensaje === "SMS de recuperación enviado correctamente") {
+                console.log('exito enviado SMS');
+                setTimeout(() => {
+                  let newStep = currentStep + 1;
+                  setCurrentStep(newStep);
+                  setActionFinished(true); // Resuelve la promesa con true después de que se complete la animación
+                }, 200);
+              }
+            })
+            .catch(error => {
+              console.error('Error al enviar:', error);
+              setTimeout(() => {
+                message.error('Error al enviar el Token. Por favor, intenta de nuevo más tarde.');
+              }, 1100);
+            });
+
         }
     }
   }
