@@ -26,7 +26,7 @@ import DobleFactor from '../Components/Form/DobleFactor'
  import CookieBanner from '../Components/Cookies/Cookies'
  import Citas from '../Pages/Citas/Citas'
  import ProtectorRutas from './ProtectedRoute'
-
+ import ContratacionAmbulancias  from   '../Pages/ContratacionAmbulancias/ContratacionAmbulancias'
  import Contenido from '../Components/ChatBot/Contenido/Contenido'
 
 export default function Router() {
@@ -74,6 +74,7 @@ export default function Router() {
         <Route path="Cookies" element={<PoliCokkies />} />
         <Route path="DobleFactor" element={<DobleFactor />} />
         <Route path="Citas" element={<Citas />} />
+        <Route path="ContratacionAmbulancias" element={<ContratacionAmbulancias />} />
         {/* Ruta para el perfil */}
         
         <Route element={<ProtectorRutas user={autentificado}/>}>
